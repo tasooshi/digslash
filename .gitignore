@@ -1,0 +1,10 @@
+.pytest_cache
+__pycache__
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+MANIFEST
+dist/
+build/
+.venv
+digslash.egg*
