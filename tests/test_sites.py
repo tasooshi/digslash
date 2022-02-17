@@ -1,4 +1,5 @@
 import functools
+import pathlib
 import threading
 from http import server
 
@@ -7,11 +8,19 @@ import pytest
 from digslash import sites
 
 
+def get_dir(dirname):
+    return pathlib.os.path.join(
+        pathlib.os.path.dirname(__file__),
+        dirname
+    )
+
+
 @pytest.fixture
 def website1():
+    web_dir = get_dir('website-1')
     httpd = server.HTTPServer(
         ('127.0.0.1', 8000),
-        functools.partial(server.SimpleHTTPRequestHandler, directory='website-1')
+        functools.partial(server.SimpleHTTPRequestHandler, directory=web_dir)
     )
     httpd_thread = threading.Thread(target=httpd.serve_forever)
     httpd_thread.daemon = True
@@ -25,9 +34,10 @@ def website1():
 
 @pytest.fixture
 def website1_with_duplicates():
+    web_dir = get_dir('website-1')
     httpd = server.HTTPServer(
         ('127.0.0.1', 8000),
-        functools.partial(server.SimpleHTTPRequestHandler, directory='website-1')
+        functools.partial(server.SimpleHTTPRequestHandler, directory=web_dir)
     )
     httpd_thread = threading.Thread(target=httpd.serve_forever)
     httpd_thread.daemon = True
@@ -41,9 +51,10 @@ def website1_with_duplicates():
 
 @pytest.fixture
 def website2():
+    web_dir = get_dir('website-2')
     httpd = server.HTTPServer(
         ('127.0.0.1', 8000),
-        functools.partial(server.SimpleHTTPRequestHandler, directory='website-2')
+        functools.partial(server.SimpleHTTPRequestHandler, directory=web_dir)
     )
     httpd_thread = threading.Thread(target=httpd.serve_forever)
     httpd_thread.daemon = True
