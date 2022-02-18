@@ -15,8 +15,8 @@ class Site:
     ACCEPTED_CONTENT_TYPES = [
         'text/html',
         'text/xml',
-        'test/plain',
-        'test/javascript',
+        'text/plain',
+        'text/javascript',
         'application/javascript',
         'application/json',
         'application/xml',
@@ -89,7 +89,7 @@ class Site:
         except Exception:
             logger.exception('Exception raised by {}'.format(worker))
 
-    async def start(self):
+    async def crawl(self):
         self.queue = asyncio.Queue()
         for i in range(self.workers_no):
             worker = asyncio.create_task(self.worker())
@@ -111,8 +111,9 @@ class Site:
                 body = await response.read()
                 if response.status not in [404, 403]:
                     if response.content_type in self.ACCEPTED_CONTENT_TYPES:
+                        logger.debug('Received response with Content-Type {} for {}'.format(response.content_type, url))
                         return body, response.content_type, response.get_encoding()
-
-    def crawl(self):
-        asyncio.run(self.start())
-        logger.debug(self.results)
+                    else:
+                        logger.debug('Unsupported Content-Type {}'.format(response.content_type))
+                else:
+                    logger.debug('Status {}, skip processing'.format(response.status))

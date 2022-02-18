@@ -35,13 +35,12 @@ class Node:
             self.parser = bs4.BeautifulSoup(content, 'html.parser')
 
     def extract_links(self):
-        if self.content_type in ['text/html']:
-            for elem, attr in self.ACCEPTED_ELEMENT_ATTRS:
-                for ele in self.parser.find_all(elem):
-                    try:
-                        self.results.add(ele[attr])
-                    except KeyError:
-                        pass
+        for elem, attr in self.ACCEPTED_ELEMENT_ATTRS:
+            for ele in self.parser.find_all(elem):
+                try:
+                    self.results.add(ele[attr])
+                except KeyError:
+                    pass
 
     def links_filter(self):
         refined = set()

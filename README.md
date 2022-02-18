@@ -6,7 +6,7 @@ Usage:
 
     >>> from digslash import sites
     >>> website = sites.Site('https://example.com', limit=50)
-    >>> website.crawl()
+    >>> await website.crawl()
 
 Output example:
 
