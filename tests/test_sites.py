@@ -1,3 +1,4 @@
+import asyncio
 import functools
 import pathlib
 import threading
@@ -67,7 +68,7 @@ def website2():
 
 
 def test_handle_duplicates(website1):
-    website1.crawl()
+    asyncio.run(website1.crawl())
     assert set(website1.results.keys()) == {
         'http://127.0.0.1:8000/',
         'http://127.0.0.1:8000/pages/contact.html',
@@ -79,7 +80,7 @@ def test_handle_duplicates(website1):
 
 
 def test_keep_duplicates(website1_with_duplicates):
-    website1_with_duplicates.crawl()
+    asyncio.run(website1_with_duplicates.crawl())
     assert set(website1_with_duplicates.results.keys()) == {
         'http://127.0.0.1:8000/',
         'http://127.0.0.1:8000/pages/contact.html',
@@ -92,7 +93,7 @@ def test_keep_duplicates(website1_with_duplicates):
 
 
 def test_site_response_content_type(website2):
-    website2.crawl()
+    asyncio.run(website2.crawl())
     assert website2.results == {
         'http://127.0.0.1:8000/': {
             'checksum': '4d651f294542b8829a46d8dc191838bd',
